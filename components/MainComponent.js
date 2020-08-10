@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Platform, Image, StyleSheet, Text } from "react-native";
 import {
   createDrawerNavigator,
@@ -13,6 +13,7 @@ import Menu from "./MenuComponent";
 import Dishdetail from "./DishdetailComponent";
 import About from "./AboutComponent";
 import Contact from "./ContactComponent";
+import Reservation from "./ReservationComponent";
 import { Icon } from "react-native-elements";
 import {
   fetchDishes,
@@ -147,6 +148,31 @@ const ContactNavigator = ({ navigation }) => {
     </Stack.Navigator>
   );
 };
+const ReservationNavigator = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#512DA8",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          color: "#fff",
+        },
+        headerLeft: () => (
+          <Icon
+            name="menu"
+            size={24}
+            color="white"
+            onPress={() => navigation.toggleDrawer()}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="Reservation" component={Reservation} />
+    </Stack.Navigator>
+  );
+};
 
 const CustomDrawerContentComponent = (props) => (
   <DrawerContentScrollView {...props}>
@@ -178,7 +204,7 @@ const drawerNavStyle = {
 const Drawer = createDrawerNavigator();
 
 const Main = (props) => {
-  React.useEffect(() => {
+  useEffect(() => {
     props.fetchDishes();
     props.fetchComments();
     props.fetchPromos();
@@ -250,6 +276,20 @@ const Main = (props) => {
                     name="address-card"
                     type="font-awesome"
                     size={18}
+                    color={color}
+                  />
+                ),
+              }}
+            />
+            <Drawer.Screen
+              name="Reservation"
+              component={ReservationNavigator}
+              options={{
+                drawerIcon: ({ color }) => (
+                  <Icon
+                    name="cutlery"
+                    type="font-awesome"
+                    size={24}
                     color={color}
                   />
                 ),
