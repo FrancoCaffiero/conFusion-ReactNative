@@ -7,6 +7,7 @@ import {
   Picker,
   Switch,
   Button,
+  Modal,
 } from "react-native";
 import { Card } from "react-native-elements";
 import DatePicker from "react-native-datepicker";
@@ -15,12 +16,20 @@ const Reservation = (props) => {
   const [guests, setGuests] = useState(1);
   const [smoking, setSmoking] = useState(false);
   const [date, setDate] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const handleReservation = () => {
-    console.log(guests);
+  const resetForm = () => {
     setGuests(1);
     setSmoking(false);
     setDate("");
+  };
+
+  const handleReservation = () => {
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
   };
 
   return (
@@ -85,6 +94,36 @@ const Reservation = (props) => {
           onPress={() => handleReservation()}
         />
       </View>
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={showModal}
+        onDismiss={() => {
+          toggleModal();
+          resetForm();
+        }}
+        onRequestClose={() => {
+          toggleModal();
+          resetForm();
+        }}
+      >
+        <View style={styles.modal}>
+          <Text style={styles.modalTitle}>Your reservation</Text>
+          <Text style={styles.modalText}>Number of guests: {guests}</Text>
+          <Text style={styles.modalText}>
+            Smoking? {smoking ? "Yes" : "No"}
+          </Text>
+          <Text style={styles.modalText}>Date and Time: {date}</Text>
+          <Button
+            onPress={() => {
+              toggleModal();
+              resetForm();
+            }}
+            color="#512DA8"
+            title="Close"
+          />
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -103,6 +142,22 @@ const styles = StyleSheet.create({
   },
   formItem: {
     flex: 1,
+  },
+  modal: {
+    justifyContent: "center",
+    margin: 20,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    backgroundColor: "#512DA8",
+    textAlign: "center",
+    color: "white",
+    marginBottom: 20,
+  },
+  modalText: {
+    fontSize: 18,
+    margin: 10,
   },
 });
 
