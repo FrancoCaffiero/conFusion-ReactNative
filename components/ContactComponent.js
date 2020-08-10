@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { Card } from "react-native-elements";
-import { createStackNavigator } from "@react-navigation/stack";
 
 const Contact = (props) => {
   return (

@@ -14,6 +14,21 @@ import Dishdetail from "./DishdetailComponent";
 import About from "./AboutComponent";
 import Contact from "./ContactComponent";
 import { Icon } from "react-native-elements";
+import {
+  fetchDishes,
+  fetchComments,
+  fetchPromos,
+  fetchLeaders,
+} from "../redux/ActionCreators";
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
+});
 
 const Stack = createStackNavigator();
 
@@ -142,7 +157,7 @@ const CustomDrawerContentComponent = (props) => (
       <View style={styles.drawerHeader}>
         <View style={{ flex: 1 }}>
           <Image
-            source={require("./images/logo.png")}
+            source={{ uri: baseUrl + "/images/logo.png" }}
             style={styles.drawerImage}
           />
         </View>
@@ -162,7 +177,14 @@ const drawerNavStyle = {
 
 const Drawer = createDrawerNavigator();
 
-const Main = () => {
+const Main = (props) => {
+  React.useEffect(() => {
+    props.fetchDishes();
+    props.fetchComments();
+    props.fetchPromos();
+    props.fetchLeaders();
+  }, []);
+
   return (
     <View
       style={{
@@ -262,4 +284,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);

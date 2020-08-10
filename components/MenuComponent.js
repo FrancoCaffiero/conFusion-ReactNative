@@ -1,33 +1,45 @@
 import React from "react";
 import { View, FlatList } from "react-native";
-import { ListItem } from "react-native-elements";
-import { DISHES } from "../shared/dishes";
+import { Tile } from "react-native-elements";
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+import { Loading } from "./LoadingComponent";
+
+const mapStateToProps = (state) => {
+  return {
+    dishes: state.dishes,
+  };
+};
 
 const Menu = (props) => {
-  const [dishes, setDishes] = React.useState(DISHES);
-
   const { navigate } = props.navigation;
 
   const renderMenuItem = ({ item, index }) => {
     return (
-      <ListItem
+      <Tile
         key={index}
         title={item.name}
-        subtitle={item.description}
-        hideChevron={true}
-        leftAvatar={{ source: require("./images/uthappizza.png") }}
+        caption={item.description}
+        featured
+        imageSrc={{ uri: baseUrl + item.image }}
         onPress={() => navigate("Dishdetail", { dishId: item.id })}
       />
     );
   };
 
-  return (
-    <FlatList
-      data={dishes}
-      renderItem={renderMenuItem}
-      keyExtractor={(item) => item.id.toString()}
-    />
-  );
+  if (props.dishes.isLoading) {
+    return <Loading />;
+  } else if (props.dishes.errMess) {
+    return <Text>{props.dishes.errMess}</Text>;
+  } else {
+    return (
+      <FlatList
+        data={props.dishes.dishes}
+        renderItem={renderMenuItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    );
+  }
 };
 
-export default Menu;
+export default connect(mapStateToProps)(Menu);
