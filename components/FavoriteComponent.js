@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, Alert } from "react-native";
 import { Tile, ListItem } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
@@ -25,7 +25,28 @@ const Favorites = (props) => {
       {
         text: "Delete",
         type: "delete",
-        onPress: () => props.deleteFavorite(item.id),
+        onPress: () => {
+          Alert.alert(
+            "Delete Favorite",
+            "Are you sure you wish to delete the favorite dish " +
+              item.name +
+              "?",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Not deleted"),
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => props.deleteFavorite(item.id),
+              },
+            ],
+            {
+              cancelable: false,
+            }
+          );
+        },
       },
     ];
     return (
