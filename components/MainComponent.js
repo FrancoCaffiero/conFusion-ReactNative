@@ -14,6 +14,7 @@ import Dishdetail from "./DishdetailComponent";
 import About from "./AboutComponent";
 import Contact from "./ContactComponent";
 import Reservation from "./ReservationComponent";
+import Favorites from "./FavoriteComponent";
 import { Icon } from "react-native-elements";
 import {
   fetchDishes,
@@ -173,6 +174,31 @@ const ReservationNavigator = ({ navigation }) => {
     </Stack.Navigator>
   );
 };
+const FavoritesNavigator = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#512DA8",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          color: "#fff",
+        },
+        headerLeft: () => (
+          <Icon
+            name="menu"
+            size={24}
+            color="white"
+            onPress={() => navigation.toggleDrawer()}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="Favorites" component={Favorites} />
+    </Stack.Navigator>
+  );
+};
 
 const CustomDrawerContentComponent = (props) => (
   <DrawerContentScrollView {...props}>
@@ -276,6 +302,20 @@ const Main = (props) => {
                     name="address-card"
                     type="font-awesome"
                     size={18}
+                    color={color}
+                  />
+                ),
+              }}
+            />
+            <Drawer.Screen
+              name="Favorites"
+              component={FavoritesNavigator}
+              options={{
+                drawerIcon: ({ color }) => (
+                  <Icon
+                    name="heart"
+                    type="font-awesome"
+                    size={24}
                     color={color}
                   />
                 ),
