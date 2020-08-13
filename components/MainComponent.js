@@ -15,6 +15,7 @@ import About from "./AboutComponent";
 import Contact from "./ContactComponent";
 import Reservation from "./ReservationComponent";
 import Favorites from "./FavoriteComponent";
+import Login from "./LoginComponent";
 import { Icon } from "react-native-elements";
 import {
   fetchDishes,
@@ -199,6 +200,31 @@ const FavoritesNavigator = ({ navigation }) => {
     </Stack.Navigator>
   );
 };
+const LoginNavigator = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#512DA8",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          color: "#fff",
+        },
+        headerLeft: () => (
+          <Icon
+            name="menu"
+            size={24}
+            color="white"
+            onPress={() => navigation.toggleDrawer()}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="Login" component={Login} />
+    </Stack.Navigator>
+  );
+};
 
 const CustomDrawerContentComponent = (props) => (
   <DrawerContentScrollView {...props}>
@@ -251,6 +277,20 @@ const Main = (props) => {
             drawerStyle={drawerNavStyle}
             drawerContent={CustomDrawerContentComponent}
           >
+            <Drawer.Screen
+              name="Login"
+              component={LoginNavigator}
+              options={{
+                drawerIcon: ({ color }) => (
+                  <Icon
+                    name="sign-in"
+                    type="font-awesome"
+                    size={24}
+                    color={color}
+                  />
+                ),
+              }}
+            />
             <Drawer.Screen
               name="Home"
               component={HomeNavigator}
