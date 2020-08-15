@@ -13,6 +13,8 @@ import {
 import { Card } from "react-native-elements";
 import DatePicker from "react-native-datepicker";
 import * as Animatable from "react-native-animatable";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
 
 const Reservation = (props) => {
   const [guests, setGuests] = useState(1);
@@ -24,6 +26,37 @@ const Reservation = (props) => {
     setGuests(1);
     setSmoking(false);
     setDate("");
+  };
+
+  const obtainNotificationPermission = async () => {
+    let permission = await Permissions.getAsync(
+      Permissions.USER_FACING_NOTIFICATIONS
+    );
+    if (permission.status !== "granted") {
+      permission = await Permissions.askAsync(
+        Permissions.USER_FACING_NOTIFICATIONS
+      );
+      if (permission.status !== "granted") {
+        Alert.alert("Permission not granted to show notifications");
+      }
+    }
+    return permission;
+  };
+
+  const presentLocalNotification = async (date) => {
+    await obtainNotificationPermission();
+    Notifications.presentLocalNotificationAsync({
+      title: "Your reservation",
+      body: "Reservation for " + date + " requested",
+      ios: {
+        sound: true,
+      },
+      android: {
+        sound: true,
+        vibrate: true,
+        color: "#512DA8",
+      },
+    });
   };
 
   const handleReservation = () => {
@@ -108,7 +141,10 @@ const Reservation = (props) => {
                   },
                   {
                     text: "OK",
-                    onPress: () => resetForm(),
+                    onPress: () => {
+                      presentLocalNotification(date);
+                      resetForm();
+                    },
                   },
                 ],
                 { cancelable: false }
